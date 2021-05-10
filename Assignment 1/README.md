@@ -1,1 +1,1 @@
-This is the first assignment for my OOP C++ course. I was to find a product of two even squares, if possible.
+This is the first assignment for my OOP C++ course. The task was to find a perfect square such that the last two digits are odd. If there is no such number, state so. The result was that there is no such perfect square such that the last two digits are odd. While I could not check every number up to infinity, I searched up to the largest integer value (that formed a perfect square), which was somewhere around 65,000 in this project.
