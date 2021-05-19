@@ -1,1 +1,3 @@
-Creating this page as the output for my program.
+Output:
+
+There is no perfect square such that the last two digits are odd.
