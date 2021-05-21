@@ -1,0 +1,133 @@
+...
+
+// lectureA2_BenKluger.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include <iostream>
+using namespace std;
+
+
+//COMMENTS
+
+
+//My method of attack was as follows: turn the string into an array filled with numbers.
+//It started off as the string "9876", so i turned it into the array: a[0] = 9; a[1] = 8... etc. Now I have real numbers I can work with. 
+//If the numbers didn't add up to >=10 it was easy to work with, as you just add the two indeces to each other. The issue arises when it
+//adds up to a number larger than 9. However, since this is addition, the largest possible number to carry over was a '1', so I created a 
+//carry variable that would switch between 0 and 1 depending on how large the sum of two numbers was, and then would add that to the next
+//index spot. Once the index (i counted from the end of the indeces to the start) hit 0 on the larger number, if carry == 1, I added the
+//number 10 to the last index, because otherwise the number would be cut short. I used a void function (see comment below) and used chars 
+//instead of strings because we didn't use strings in my 111 class, so I'm fairly new with them, and better at working with C strings.
+
+
+
+void add(char *a, char *b) //I used a void because I'm just going to cout the entire array index by index instead of an actual string that is workable with. I'm lazy
+{
+
+		int len1 = strlen(a); //finding the length of str1 so I can use it in the for loop
+		int firstNum[100];
+		for (int i = 0; i < len1; i++) //for loop to fill up the int array with the numbers from str1
+		{
+			firstNum[i] = a[i] - 48;
+		}
+
+		int len2 = strlen(b); //length of str2
+		int secondNum[100];
+		for (int i = 0; i < len2; i++)
+		{
+			secondNum[i] = b[i] - 48; //turn them into actual digits and not ASCII chars
+		}
+
+		//now there are two int arrays filled with the same numbers as the str arrays
+
+		cout << "Testing your first string input: " << a << endl; //cout the two strings for test
+		cout << "Testing your second string input: " << b << endl;
+
+		cout << "Testing your first string as a number array: ";
+		for (int i = 0; i < len1; i++) //cout the entire int1 array
+			cout << firstNum[i];
+		cout << endl;
+
+		cout << "Testing your second string as a number array: ";
+		for (int i = 0; i < len2; i++) //cout the entire int2 array
+			cout << secondNum[i];
+		cout << endl;
+
+		int biggerLen = 0; //this is to use the larger number as the end of the for loops
+		if (len1 > len2)
+			biggerLen = len1;
+		else if (len1 == len2)
+			biggerLen = len1;
+		else
+			biggerLen = len2;
+
+		//the actual addition section
+		int sum[100];
+		int carry = 0;
+		for (int i = len1, j = len2, s = biggerLen; (i >= 0) || (j >= 0); i--, j--, s--) //loop to fill up the points in the array
+		{
+
+			int numberTest = 0;
+			int nonCarry = 0;
+			if ((i >= 0) && (j >= 0))
+				numberTest = firstNum[i] + secondNum[j];
+			else if ((j < 0))
+				numberTest = firstNum[i];
+			else
+				numberTest = secondNum[j];
+
+			if (numberTest < 10) //if there is no need to carry anything
+			{
+				nonCarry = numberTest;
+				sum[s] = nonCarry + carry;
+				carry = 0;
+			}
+			else //if the sum is larger than 9
+			{
+				nonCarry = numberTest - 10;
+				sum[s] = nonCarry + carry;//this makes the specific index equal to the number below ten
+				carry = 1; //this allows me to add a carry (+1) to the next sum[i]
+				//if this was a multiplication problem I wouldn't hardcode carry to 1. I would set carry = numberTest/10
+			}
+
+			if ((s == 0) && (carry == 1)) //add this clause for if you get to the end of the list and there's a carry number
+				sum[s] += 10;
+		}
+
+		cout << "The sum of the two numbers you added is equal to: ";
+		for (int i = 0; i < biggerLen; i++) //cout-ing my answer
+			cout << sum[i];
+
+		cout << endl;
+	
+}
+
+
+int main()
+{
+	char a[100]; //declaring my first and second strings
+	char b[100];
+
+	while (1)
+	{
+		cout << "Please enter one number followed by another. Enter \"done\" to exit the program: " << endl; //user input section
+		cin >> a;
+		if (a[0] == 'd') //This is a bit sloppy because it doesnt test the other 3 numbers. I can give a full test with && a[1] && a[2]... but I felt that that would be unecessary.
+			break;	
+		cin >> b;
+
+		add(a, b); //calling the actual void function itself
+	}
+		return (0);
+}
+
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+// Debug program: F5 or Debug > Start Debugging menu
+
+// Tips for Getting Started: 
+//   1. Use the Solution Explorer window to add/manage files
+//   2. Use the Team Explorer window to connect to source control
+//   3. Use the Output window to see build output and other messages
+//   4. Use the Error List window to view errors
+//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
+//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
